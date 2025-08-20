@@ -4,51 +4,63 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cricket Scoreboard</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h2>Cricket Scoreboard</h2>
 
-  <div class="row">
-    <div>Team: <span id="teamScore">0/0</span></div>
-    <div>Overs: <span id="overs">0.0</span></div>
+  <div class="topbar">
+    <div class="stat">
+      <span class="stat-label">Team</span>
+      <span id="teamScore" class="stat-value">0/0</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Overs</span>
+      <span id="overs" class="stat-value">0.0</span>
+    </div>
   </div>
 
   <div class="players">
     <div id="rahulCard" class="player striker">
-      <span id="rahulName">Rahul*</span>: <span id="rahulRuns">0</span> (<span id="rahulBalls">0</span>)
+      <div class="player-name"><span id="rahulName">Rahul*</span></div>
+      <div class="player-line"><span id="rahulRuns">0</span> (<span id="rahulBalls">0</span>)</div>
     </div>
     <div id="rohitCard" class="player">
-      <span id="rohitName">Rohit</span>: <span id="rohitRuns">0</span> (<span id="rohitBalls">0</span>)
+      <div class="player-name"><span id="rohitName">Rohit</span></div>
+      <div class="player-line"><span id="rohitRuns">0</span> (<span id="rohitBalls">0</span>)</div>
     </div>
   </div>
 
   <div class="status" id="status">Ready</div>
 
   <div class="group">
-    <button class="btn run" data-r="1">1</button>
-    <button class="btn run" data-r="2">2</button>
-    <button class="btn run" data-r="3">3</button>
-    <button class="btn run" data-r="4">4</button>
-    <button class="btn run" data-r="6">6</button>
+    <div class="group-title">Runs</div>
+    <button class="btn btn-run" data-r="1">1</button>
+    <button class="btn btn-run" data-r="2">2</button>
+    <button class="btn btn-run" data-r="3">3</button>
+    <button class="btn btn-run" data-r="4">4</button>
+    <button class="btn btn-run" data-r="6">6</button>
   </div>
 
   <div class="group">
-    <button id="wicketBtn" class="btn danger">Wicket</button>
-    <button id="lbwBtn" class="btn danger">LBW</button>
+    <div class="group-title">Dismissals</div>
+    <button id="wicketBtn" class="btn btn-danger">Wicket</button>
+    <button id="lbwBtn" class="btn btn-danger">LBW</button>
   </div>
 
   <div class="group">
+    <div class="group-title">Extras</div>
     <button id="wideBtn" class="btn">Wide</button>
     <button id="noballBtn" class="btn">No Ball</button>
-    <button id="freehitBtn" class="btn">Free Hit</button>
+    <button id="freehitBtn" class="btn btn-warn">Free Hit</button>
     <button id="byeBtn" class="btn">Bye</button>
     <button id="legbyeBtn" class="btn">Leg Bye</button>
   </div>
 
   <div class="group">
+    <div class="group-title">Actions</div>
     <button id="switchBtn" class="btn">Switch Striker</button>
-    <button id="resetBtn" class="btn outline">Reset</button>
+    <button id="resetBtn" class="btn btn-outline">Reset</button>
   </div>
 
   <script src="script.js"></script>

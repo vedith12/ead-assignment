@@ -1,18 +1,18 @@
-// Simple state
+//  State
 const state = {
   teamRuns: 0,
   wickets: 0,
   overs: 0,
-  balls: 0, // 0...5 valid balls within current over
-  striker: 'Rahul', // 'Rahul' and 'Rohit'
-  freeHitNext: false,
+  balls: 0,            // 0..5 valid balls within current over
+  striker: 'Rahul',    // 'Rahul' | 'Rohit'
+  freeHitNext: false,  // next delivery: no wicket, no ball increment 
   players: {
     Rahul: { runs: 0, balls: 0, out: false },
     Rohit: { runs: 0, balls: 0, out: false },
   },
 };
 
-// Elements
+// Elements 
 const elTeam = document.getElementById('teamScore');
 const elOvers = document.getElementById('overs');
 const elStatus = document.getElementById('status');
@@ -26,6 +26,7 @@ const rohitRuns = document.getElementById('rohitRuns');
 const rahulBalls = document.getElementById('rahulBalls');
 const rohitBalls = document.getElementById('rohitBalls');
 
+// Helpers 
 function inningsOver() { return state.wickets >= 10; }
 function showStatus(msg){ elStatus.textContent = msg; }
 function fmtOvers(){ return `${state.overs}.${state.balls}`; }
@@ -59,6 +60,7 @@ function switchStriker(){
   render();
 }
 
+//  Event Handlers 
 function handleRuns(n){
   if (inningsOver()) return;
   const p = state.players[state.striker];
@@ -67,12 +69,14 @@ function handleRuns(n){
   p.runs += n;
   p.balls += 1;
 
-  // consume free hit flag (affects only wicket rule)
+  // consume free-hit flag (affects only wicket rule & ball increment)
   if (state.freeHitNext) state.freeHitNext = false;
 
-  // odd runs switch after counting ball
+  // valid delivery: increment ball
   countValidBall();
   render();
+
+  // odd runs switch striker after render
   if (n % 2 === 1) switchStriker();
   showStatus(`Runs: ${n}`);
 }
@@ -80,7 +84,7 @@ function handleRuns(n){
 function handleWide(){
   if (inningsOver()) return;
   state.teamRuns += 1; // team only
-  // no valid ball
+  // no ball increment
   render();
   showStatus('Wide +1');
 }
@@ -97,7 +101,7 @@ function handleNoBall(){
 
 function handleFreeHit(){
   if (inningsOver()) return;
-  // +1 team and set next ball as free hit; the next delivery cannot be out and does not increment ball.
+  // +1 team and set next ball as free hit; next delivery: no wicket, no ball increment 
   state.teamRuns += 1;
   state.freeHitNext = true;
   render();
@@ -106,7 +110,7 @@ function handleFreeHit(){
 
 function handleBye(){
   if (inningsOver()) return;
-  state.teamRuns += 1;
+  state.teamRuns += 1; // team only
   countValidBall();
   render();
   showStatus('Bye +1');
@@ -114,7 +118,7 @@ function handleBye(){
 
 function handleLegBye(){
   if (inningsOver()) return;
-  state.teamRuns += 1;
+  state.teamRuns += 1; // team only
   countValidBall();
   render();
   showStatus('Leg Bye +1');
@@ -127,7 +131,7 @@ function handleWicket(kind){
   if (state.freeHitNext){
     state.freeHitNext = false;
     render();
-    showStatus(`${kind} on Free Hit: Not Out`);
+    showStatus(`${kind} on Free Hit: Not Out (no ball)`);
     return;
   }
 
@@ -138,8 +142,10 @@ function handleWicket(kind){
   state.wickets = Math.min(10, state.wickets + 1);
   countValidBall();
 
-  // new batsman simulated as Rahul 
-  state.striker = 'Rahul';
+  // After wicket/LBW: new batsman replaces the OUT striker, non-striker faces next ball
+  // So make the other opener the striker
+  state.striker = state.striker === 'Rahul' ? 'Rohit' : 'Rahul';
+
 
   render();
   showStatus(`${kind}!`);
@@ -160,8 +166,8 @@ function handleReset(){
   showStatus('Reset');
 }
 
-// Wire up
-document.querySelectorAll('.btn.run').forEach(b=>{
+// Wire Up 
+document.querySelectorAll('.btn-run').forEach(b=>{
   b.onclick = () => handleRuns(parseInt(b.dataset.r,10));
 });
 document.getElementById('wideBtn').onclick = handleWide;
@@ -174,5 +180,6 @@ document.getElementById('lbwBtn').onclick = () => handleWicket('LBW');
 document.getElementById('switchBtn').onclick = switchStriker;
 document.getElementById('resetBtn').onclick = handleReset;
 
-// Init
+//  Init 
 render();
+showStatus('Ready');
